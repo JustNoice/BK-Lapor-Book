@@ -1,9 +1,10 @@
+import 'package:bk_lapor_book_main/pages/dashboard/AllLaporan.dart';
+import 'package:bk_lapor_book_main/pages/dashboard/MyLaporan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lapor_book/models/akun.dart';
-import 'package:lapor_book/components/styles.dart';
-
+import 'package:bk_lapor_book_main/models/akun.dart';
+import 'package:bk_lapor_book_main/components/styles.dart';
 
 import 'ProfilePage.dart';
 
@@ -38,7 +39,6 @@ class _DashboardFull extends State<DashboardFull> {
     // TODO: implement initState
     super.initState();
     getAkun();
-
   }
 
   final _auth = FirebaseAuth.instance;
@@ -92,12 +92,10 @@ class _DashboardFull extends State<DashboardFull> {
   bool _isLoading = false;
 
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     pages = <Widget>[
-      Text("Diisi nanti"),
-      Text("Kosong juga"),
-      // AllLaporan(akun: akun),
-      // MyLaporan(akun: akun),
+      AllLaporan(akun: akun),
+      MyLaporan(akun: akun),
       Profile(akun: akun),
     ];
     return Scaffold(
@@ -112,7 +110,7 @@ class _DashboardFull extends State<DashboardFull> {
       ),
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Lapor Book', style: headerStyle(level:2)),
+        title: Text('Lapor Book', style: headerStyle(level: 2)),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomNavigationBar(

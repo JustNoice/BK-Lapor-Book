@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lapor_book/components/models/akun.dart';
-import 'package:lapor_book/components/styles.dart';
+import 'package:bk_lapor_book_main/components/models/akun.dart';
+import 'package:bk_lapor_book_main/components/styles.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -36,61 +36,60 @@ class _DashboardFull extends State<DashboardFull> {
     // TODO: implement initState
     super.initState();
     getAkun();
-
   }
 
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
   Akun akun = Akun(
-  uid: '',
-  docId: '',
-  nama: '',
-  noHP: '',
-  email: '',
-  role: '',
-);
+    uid: '',
+    docId: '',
+    nama: '',
+    noHP: '',
+    email: '',
+    role: '',
+  );
 
-void getAkun() async {
-  setState(() {
-    _isLoading = true;
-  });
-  try {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-        .collection('akun')
-        .where('uid', isEqualTo: _auth.currentUser!.uid)
-        .limit(1)
-        .get();
+  void getAkun() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('akun')
+          .where('uid', isEqualTo: _auth.currentUser!.uid)
+          .limit(1)
+          .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+      if (querySnapshot.docs.isNotEmpty) {
+        var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
 
+        setState(() {
+          akun = Akun(
+            uid: userData['uid'],
+            nama: userData['nama'],
+            noHP: userData['noHP'],
+            email: userData['email'],
+            docId: userData['docId'],
+            role: userData['role'],
+          );
+        });
+      }
+    } catch (e) {
+      final snackbar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      print(e);
+    } finally {
       setState(() {
-        akun = Akun(
-          uid: userData['uid'],
-          nama: userData['nama'],
-          noHP: userData['noHP'],
-          email: userData['email'],
-          docId: userData['docId'],
-          role: userData['role'],
-        );
+        _isLoading = false;
       });
     }
-  } catch (e) {
-    final snackbar = SnackBar(content: Text(e.toString()));
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    print(e);
-  } finally {
-    setState(() {
-      _isLoading = false;
-    });
   }
-}
 
   bool _isLoading = false;
 
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
@@ -99,7 +98,7 @@ void getAkun() async {
       ),
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Lapor Book', style: headerStyle(level:2)),
+        title: Text('Lapor Book', style: headerStyle(level: 2)),
         centerTitle: true,
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -79,7 +79,6 @@ class _ProfileState extends State<Profile> {
                     fontSize: 20),
               ),
             ),
-            // Codingan tampilan email
             SizedBox(
               height: 35,
             ),

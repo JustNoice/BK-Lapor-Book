@@ -1,100 +1,18 @@
-// import 'package:flutter/material.dart';
-
-// class RegisterPage extends StatefulWidget {
-//   const RegisterPage({super_key});
-
-//   @override
-//   State<StatefulWidget> createState() => _RegisterPage();
-// }
-
-// class _RegisterPage extends State<RegisterPage> {
-//   final _formKey = GlobalKey<FormState>();
-
-//   String? nama;
-//   String? email;
-//   String? noHP;
-//   String? password;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // throw UnimplementedError();
-//     return Scaffold(
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               SizedBox(height: 80, width: double.infinity),
-//               const Text(
-//                 "Register",
-//                 style: TextStyle(
-//                   fontSize: 30,
-//                   fontWeight: FontWeight.bold,
-//                   color: Colors.black,
-//                 ),
-//               ),
-//               const Text(
-//                 "Create ur profile to start ur journey",
-//                 style: TextStyle(color: Colors.grey),
-//               ),
-//               const SizedBox(height: 20),
-//               Container(
-//                 child: Form(
-//                     key: _formKey,
-//                     child: Column(children: [
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           const Text("Name",
-//                               style: TextStyle(
-//                                   fontSize: 20, fontWeight: FontWeight.bold)),
-//                           const SizedBox(height: 5),
-//                           Container(
-//                               child: TextFormField(
-//                             onChanged: (value) {
-//                               nama = value;
-//                             },
-//                             decoration: InputDecoration(
-//                                 hintText: "Nama lu jing",
-//                                 floatingLabelBehavior:
-//                                     FloatingLabelBehavior.never,
-//                                 border: OutlineInputBorder(
-//                                     borderRadius: BorderRadius.circular(10))),
-//                           ))
-//                         ],
-//                       ),
-//                       //define imput component
-//                       Text("Name"),
-//                       Text("Email"),
-//                       Text("No. HP"),
-//                       Text("Password"),
-//                       Text("Confirmation Password"),
-//                       FilledButton(onPressed: () {}, child: Text('Register'))
-//                     ])),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lapor_book/components/input_widget.dart';
-import 'package:lapor_book/components/styles.dart';
-import 'package:lapor_book/components/validators.dart';
+import 'package:bk_lapor_book_main/components/input_widget.dart';
+import 'package:bk_lapor_book_main/components/styles.dart';
+import 'package:bk_lapor_book_main/components/validators.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _RegisterPageState();
+  State<StatefulWidget> createState() => _RegisterPage();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPage extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
@@ -104,47 +22,51 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _password = TextEditingController();
 
-  void initState() {
-    super.initState();
+  // void initState(){
+  //   super.initState();
 
-  }
+  //   //langsung loncat ke register
+  //   Future.delayed(Duration.zero, () {
+  //     Navigator.pushReplacementNamed(context, '/register');
+  //   });
+  // }
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-void register() async {
-  setState(() {
-    _isLoading = true;
-  });
-  try {
-    CollectionReference akunCollection = _db.collection('akun');
-
-    final password = _password.text;
-    await _auth.createUserWithEmailAndPassword(
-        email: email!, password: password);
-
-    final docId = akunCollection.doc().id;
-    await akunCollection.doc(docId).set({
-      'uid': _auth.currentUser!.uid,
-      'nama': nama,
-      'email': email,
-      'noHP': noHP,
-      'docId': docId,
-      'role': 'user',
-    });
-
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/login', ModalRoute.withName('/login'));
-  } catch (e) {
-    final snackbar = SnackBar(content: Text(e.toString()));
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    print(e);
-  } finally {
+  void register() async {
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
     });
+    try {
+      CollectionReference akunCollection = _db.collection('akun');
+
+      final password = _password.text;
+      await _auth.createUserWithEmailAndPassword(
+          email: email!, password: password);
+
+      final docId = akunCollection.doc().id;
+      await akunCollection.doc(docId).set({
+        'uid': _auth.currentUser!.uid,
+        'nama': nama,
+        'email': email,
+        'noHP': noHP,
+        'docId': docId,
+        'role': 'user',
+      });
+
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/login', ModalRoute.withName('/login'));
+    } catch (e) {
+      final snackbar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      print(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +81,7 @@ void register() async {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 80),
-                    Text('Register', style: headerStyle(level:1)),
+                    Text('Register', style: headerStyle(level: 1)),
                     Container(
                       child: const Text(
                         'Create your profile to start your journey',
@@ -221,13 +143,14 @@ void register() async {
                                 width: double.infinity,
                                 child: FilledButton(
                                     style: buttonStyle,
-                                    child: Text('Register', style: headerStyle(level: 2)),
+                                    child: Text('Register',
+                                        style: headerStyle(level: 2)),
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         register();
                                       }
                                     }),
-                              ) 
+                              )
                             ],
                           )),
                     ),

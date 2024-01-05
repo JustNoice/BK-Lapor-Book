@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:lapor_book/components/input_widget.dart';
-import 'package:lapor_book/components/validators.dart';
+import 'package:bk_lapor_book_main/components/input_widget.dart';
+import 'package:bk_lapor_book_main/components/validators.dart';
 
 import '../components/styles.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage ({super.key});
+  const LoginPage({super.key});
   @override
   State<StatefulWidget> createState() => LoginPageState();
 }
+
+TextStyle header1 = TextStyle(
+  fontSize: 24.0,
+  fontWeight: FontWeight.bold,
+  // tambahkan atribut lain sesuai kebutuhan
+);
 
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
@@ -34,7 +40,7 @@ class LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 80),
-                    Text('Login', style: headerStyle(level:2)),
+                    Text('Login', style: header1),
                     Container(
                       child: const Text(
                         'Login to your account',
@@ -77,6 +83,7 @@ class LoginPageState extends State<LoginPage> {
                                             headerStyle(level: 3, dark: false)),
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
+                                        // login();
                                         login();
                                       }
                                     }),
@@ -103,6 +110,7 @@ class LoginPageState extends State<LoginPage> {
       ),
     );
   }
+
   void login() async {
     setState(() {
       _isLoading = true;
@@ -124,4 +132,3 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 }
-
